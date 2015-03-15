@@ -1,0 +1,101 @@
+---
+---
+title: 'Reproducible Research: Peer Assessment 1'
+author: "David Anderson"
+date: "March 15, 2015"
+output: html_document
+---
+---
+
+
+## Loading and preprocessing the data
+
+Read in the data:
+```{r}
+if(!file.exists('activity.csv')){
+  unzip('activity.zip')
+}
+activity <- read.csv('activity.csv')
+```
+
+Process the data:
+Create a Column for the Hour of Day
+```{r}
+activity$hour <- activity$interval %/% 100
+```
+
+## What is mean total number of steps taken per day?
+Sum steps per day:
+```{r}
+daily.steps <- tapply(activity$steps, activity$date, sum, na.rm=TRUE)
+```
+
+Plot the steps per day in a histogram:
+
+```{r echo=FALSE}
+hist(daily.steps, 20, main="Total number of steps taken per day", xlab="Steps per day")
+```
+
+```{r}
+meansteps <- mean(daily.steps)
+mediansteps <- median(daily.steps)
+```
+Calculate the mean: `r mean(daily.steps)` steps; and median: `r median(daily.steps)` steps.
+
+## What is the average daily activity pattern?
+
+1.  Determine the mean total steps per time interval, and plot the average activity per time interval:
+
+```{r}
+mean.steps <- as.data.frame(tapply(activity$steps, INDEX = activity$interval, mean, na.rm=TRUE))
+colnames(mean.steps) <- "meansteps"
+mean.steps$interval <- rownames(mean.steps)
+plot(mean.steps$interval, mean.steps$meansteps, type = "l", 
+    xlab = "5 minute time interval", ylab = "Average steps", main = "Average Number of Steps by Time Interval")
+```
+2.  Determine which time interval has the most steps on average:
+
+```{r}
+maxMean <- (mean.steps$meansteps == max(mean.steps$meansteps))
+maxInterval <-mean.steps[maxMean,]
+max_interval <- maxInterval[1, 2]
+```
+The interval with the most average steps is: `r max_interval`
+
+## Imputing missing values
+  1.  Calculate the # of rows with NAs:
+```{r}
+CompleteActivity <- activity[complete.cases(activity),]
+NArows <- nrow(activity) - nrow(CompleteActivity)
+```
+There are `r NArows` rows with NA values
+
+  2.  Fill in the NA values.  We will use the average value from the same time interval.
+  
+```{r}
+library(plyr)
+#Merge the data
+merged <- arrange(join(activity, mean.steps), interval)
+#input the average for interval in place of NA
+merged$steps[is.na(merged$steps)] <- merged$meansteps[is.na(merged$steps)]
+#Plot the new data histogram
+filledActivity <- ddply(merged, .(date), summarise, steps=sum(steps))
+hist(filledActivity$steps, 20, main="Number of Steps", 
+     xlab="Total number of steps taken each day",)
+
+#new means
+mean(filledActivity$steps)
+median(filledActivity$steps)
+steps1 <- sum(activity$steps, NA.rm="true")
+steps2 <- sum(merged$steps)
+diff <- steps2 -steps1
+steps1
+steps2
+diff
+```
+
+## Are there differences in activity patterns between weekdays and weekends?
+
+```{r}
+
+```
