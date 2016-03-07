@@ -42,6 +42,8 @@ Plot the steps per day in a histogram:
 ```{r echo=FALSE}
 hist(daily.steps, 20, main="Total number of steps taken per day", xlab="Steps per day")
 ```
+![](figure/Rplot.png) 
+
 
 ```{r}
 meansteps <- mean(daily.steps)
