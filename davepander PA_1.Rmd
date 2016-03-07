@@ -42,7 +42,7 @@ hist(fitivity.daily$total.steps, col="blue", main="Fitness Activity",
      xlab="Daily Steps")
 ```
 
-![](figure/histogram-1.png)
+!(figure/histogram-1.png)
 
 The mean and median per interval are:
 
@@ -88,7 +88,7 @@ g + geom_line(color="blue") +
        y="Mean number of steps")
 ```
 
-![](figure/activitypattern-1.png) 
+!(figure/activitypattern-1.png) 
 
 What interval has the highest average number of steps?
 
@@ -171,7 +171,7 @@ hist(total.steps.imputed, col="blue", main="Fitness Tracker Activity",
      xlab="Number of Steps Per Day (imputed)")
 ```
 
-![](figure/meanperdayimpute-1.png) 
+!(figure/meanperdayimpute-1.png) 
 
 Check to make sure we filled in all the missing values:
 
@@ -205,16 +205,4 @@ ggplot(steps.day.daytype, aes(interval, steps)) +
          title="Activity patterns on weekdays vs. weekends")
 ```
 
-![](figure/mean.per.day.by.daytype-1.png) 
-
-It's a bit nicer to overplot them, although that isn't
-strictly part of the assignment.
-
-```r
-ggplot(steps.day.daytype, aes(interval, steps)) + 
-    geom_line(aes(color=day.type, linetype=day.type)) +
-    labs(x="Time of Day (min)", y="Number of steps",
-         title="Activity patterns on weekdays vs. weekends")
-```
-
-![](figure/mean.per.day.by.daytype.overplot-1.png) 
+!(figure/mean.per.day.by.daytype-1.png) 
